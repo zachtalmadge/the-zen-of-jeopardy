@@ -52,33 +52,49 @@ def find_or_create_player():
         console.print(f"Welcome back, {player.name}!", style="subhead")
         play_game(player)
 
-table = Table(title="Play the Zen of Jeopardy!")
-categories = [category.name for category in Category.get_all()]
-for category in categories:
-    table.add_column(category, style="heading")
+def make_table():
+    table = Table(title="Play the Zen of Jeopardy!")
+    categories = [category.name for category in Category.get_all()]
+    for category in categories:
+        table.add_column(category, style="heading")
 
-table.add_row("$200", "$200", "$200", "$200", "$200", "$200", style="tile")
-table.add_row("$400", "$400", "$400", "$400", "$400", "$400", style="tile")
-table.add_row("$600", "$600", "$600", "$600", "$600", "$600", style="tile")
-table.add_row("$800", "$800", "$800", "$800", "$800", "$800", style="tile")
-table.add_row("$1000", "$1000", "$1000", "$1000", "$1000", "$1000", style="tile")
-
-def play_game(player):
+    first_row = [question.point_value for question in Question.get_questions_by_level(1)]
+    table.add_row(f"${first_row[0]}", f"${first_row[1]}", f"${first_row[2]}", f"${first_row[3]}", f"${first_row[4]}", f"${first_row[5]}", style="tile")
+    
+    second_row = [question.point_value for question in Question.get_questions_by_level(2)]
+    table.add_row(f"${second_row[0]}", f"${second_row[1]}", f"${second_row[2]}", f"${second_row[3]}", f"${second_row[4]}", f"${second_row[5]}", style="tile")
+    
+    third_row = [question.point_value for question in Question.get_questions_by_level(3)]
+    table.add_row(f"${third_row[0]}", f"${third_row[1]}", f"${third_row[2]}", f"${third_row[3]}", f"${third_row[4]}", f"${third_row[5]}", style="tile")
+    
+    fourth_row = [question.point_value for question in Question.get_questions_by_level(4)]
+    table.add_row(f"${fourth_row[0]}", f"${fourth_row[1]}", f"${fourth_row[2]}", f"${fourth_row[3]}", f"${fourth_row[4]}", f"${fourth_row[5]}", style="tile")
+    
+    fifth_row = [question.point_value for question in Question.get_questions_by_level(5)]
+    table.add_row(f"${fifth_row[0]}", f"${fifth_row[1]}", f"${fifth_row[2]}", f"${fifth_row[3]}", f"${fifth_row[4]}", f"${fifth_row[5]}", style="tile")
+    
     console.print(table)
+    
+def play_game(player):
+    make_table()
     select_category(player)
 
-def check_answer(selected_question, answer):
-    print(answer)
+def check_answer(selected_question, answer, player):
     if selected_question.answer == answer:
-        print("Great job!")
-        add_points()
-        
+        console.print("Great job!", style="subhead")
+        # add_points(player)
+    else:
+        console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
+    selected_question.point_value = " "
+    selected_question.save()
+    play_game(player)
+
 
 def select_category(player):
     console.print("Select a question: ", style="subhead")
     selected_category = input("Type a category name: ")
-    selected_question = input("Type a question amount: $")
-    points = int(selected_question)
+    selected_points = input("Type a question amount: $")
+    points = int(selected_points)
     select_question(selected_category, points, player)
 
 def select_question(category_name, points, player):
@@ -87,7 +103,7 @@ def select_question(category_name, points, player):
     if selected_question:
         console.print(selected_question.question_text, style="subhead")
         answer = input("What is... ")
-        check_answer(selected_question, answer)
+        check_answer(selected_question, answer, player)
     else:
         print("No question found")
         select_question(category_name, points, player)
