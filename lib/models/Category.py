@@ -1,13 +1,14 @@
 # category.py
-from __init__ import CONN  
+from __init__ import CONN  # Import the connection from the __init__.py module within the same package
 
 class Category:
     """Represents a category for quiz questions."""
 
-    def __init__(self, name, category_id=None):
+    def __init__(self, name, questions, category_id=None):
         """Initialize a new Category instance."""
         self.id = category_id
         self.name = name
+        self.questions = questions
 
     @staticmethod
     def create_table():
@@ -19,6 +20,7 @@ class Category:
                 name TEXT NOT NULL UNIQUE
             )
         ''')
+        
         CONN.commit()
 
     def save(self):
@@ -58,6 +60,18 @@ class Category:
         cursor = CONN.cursor()
         cursor.execute('DELETE FROM categories WHERE id = ?', (category_id,))
         CONN.commit()
+        
+    def add_question(self, question):
+        """Add a Question object to the category."""
+        self.questions.append(question)
+
+    def remove_question(self, question):
+        """Remove a Question object from the category."""
+        self.questions.remove(question)
+
+    def get_questions(self):
+        """Get all Question objects in the category."""
+        return self.questions
         
 
 # Example usage
