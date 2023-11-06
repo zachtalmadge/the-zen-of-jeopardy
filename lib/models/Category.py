@@ -4,34 +4,45 @@ from __init__ import CONN  # Import the connection from the __init__.py module w
 class Category:
     """Represents a category for quiz questions."""
 
-    def __init__(self, name, questions, category_id=None):
+    def __init__(self, name, questions=None, category_id=None):
         """Initialize a new Category instance."""
         self.id = category_id
         self.name = name
-        self.questions = questions
+        self.questions = questions if questions is not None else []
 
     @staticmethod
     def create_table():
         """Create the category table in the database if it does not exist."""
-        cursor = CONN.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS categories (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE
-            )
-        ''')
-        
-        CONN.commit()
+        with CONN:
+            cursor = CONN.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS categories (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL UNIQUE
+                )
+            ''')
+
+    @classmethod
+    def drop_table(cls):
+        with CONN:
+            cursor = CONN.cursor()
+            cursor.execute('DROP TABLE IF EXISTS categories')
+
+    @classmethod
+    def create(cls, name, questions=None):
+        new_category = cls(name, questions)
+        new_category.save()
+        return new_category
 
     def save(self):
         """Save the current instance to the database."""
-        cursor = CONN.cursor()
-        if self.id is None:
-            cursor.execute('INSERT INTO categories (name) VALUES (?)', (self.name,))
-            self.id = cursor.lastrowid
-        else:
-            cursor.execute('UPDATE categories SET name = ? WHERE id = ?', (self.name, self.id))
-        CONN.commit()
+        with CONN:
+            cursor = CONN.cursor()
+            if self.id is None:
+                cursor.execute('INSERT INTO categories (name) VALUES (?)', (self.name,))
+                self.id = cursor.lastrowid
+            else:
+                cursor.execute('UPDATE categories SET name = ? WHERE id = ?', (self.name, self.id))
 
     @staticmethod
     def get_all():
@@ -57,21 +68,10 @@ class Category:
     @staticmethod
     def delete(category_id):
         """Delete a category by its ID."""
-        cursor = CONN.cursor()
-        cursor.execute('DELETE FROM categories WHERE id = ?', (category_id,))
-        CONN.commit()
-        
-    def add_question(self, question):
-        """Add a Question object to the category."""
-        self.questions.append(question)
-
-    def remove_question(self, question):
-        """Remove a Question object from the category."""
-        self.questions.remove(question)
-
-    def get_questions(self):
-        """Get all Question objects in the category."""
-        return self.questions
+        with CONN:
+            cursor = CONN.cursor()
+            cursor.execute('DELETE FROM categories WHERE id = ?', (category_id,))
+    
         
 
 # Example usage
