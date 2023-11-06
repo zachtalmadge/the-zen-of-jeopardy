@@ -1,5 +1,5 @@
 # category.py
-from __init__ import CONN  # Import the connection from the __init__.py module within the same package
+from models.__init__ import CONN  # Import the connection from the __init__.py module within the same package
 
 class Category:
     """Represents a category for quiz questions."""
