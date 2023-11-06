@@ -59,15 +59,21 @@ table.add_row("$600", "$600", "$600", "$600", "$600", "$600", style="tile")
 table.add_row("$800", "$800", "$800", "$800", "$800", "$800", style="tile")
 table.add_row("$1000", "$1000", "$1000", "$1000", "$1000", "$1000", style="tile")
 
-def play_game(current_player):
+def play_game(player):
     console.print(table)
-    select_category()
+    select_category(player)
 
-def select_category():
-    categories = [category.name for category in Category.get_all()]
-    for category in categories:
-        print(f"{list.index(category) + 1}. {category}")
-    selected_category = input("Select a category: ")
+def select_category(player):
+    console.print("Select a question: ", style="subhead")
+    selected_category = input("Type a category name: ")
+    selected_question = input("Type a question amount: $")
+    select_question(selected_category, selected_question, player)
+
+def select_question(category, question, player):
+    print(category, player)
+    selected_question = Question.
+    print(selected_question)
 
 from models.User import User
 from models.Category import Category
+from models.Question import Question
