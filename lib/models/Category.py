@@ -1,5 +1,5 @@
 # category.py
-from __init__ import CONN  
+from models.__init__ import CONN, CURSOR
 
 class Category:
     """Represents a category for quiz questions."""
@@ -20,6 +20,21 @@ class Category:
             )
         ''')
         CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        CURSOR.execute(
+            """
+                DROP TABLE IF EXISTS categories;
+            """
+        )
+        CONN.commit()
+
+    @classmethod
+    def create(cls, name):
+        new_category = cls(name)
+        new_category.save()
+        return new_category
 
     def save(self):
         """Save the current instance to the database."""
