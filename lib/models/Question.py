@@ -1,5 +1,5 @@
 # question.py
-from __init__ import CONN
+from models.__init__ import CONN
 
 class Question:
     def __init__(self, question_text, answer, point_value, category_id):
