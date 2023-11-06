@@ -2,18 +2,19 @@
 from models.__init__ import CONN
 
 class Question:
-    def __init__(self, question_text, answer, point_value, category_id, id=None):
+    def __init__(self, question_text, answer, point_value, level, category_id, id=None):
         self.id = id
         self.question_text = question_text
         self.answer = answer
         self.point_value = point_value
+        self.level = level
         self.category_id = category_id
 
-    def create_question(question_text, answer, point_value, category_id):
+    def create_question(question_text, answer, point_value, level, category_id):
         # Create a new question in the database.
         cursor = CONN.cursor()
-        cursor.execute("INSERT INTO questions (question_text, answer, point_value, category_id) VALUES (?, ?, ?, ?)",
-                       (question_text, answer, point_value, category_id))
+        cursor.execute("INSERT INTO questions (question_text, answer, point_value, level, category_id) VALUES (?, ?, ?, ?, ?)",
+                       (question_text, answer, point_value, level, category_id))
         CONN.commit()
 
     def delete_question(question_id):
@@ -26,12 +27,12 @@ class Question:
         """Save the current instance to the database."""
         cursor = CONN.cursor()
         if self.id is None:
-            cursor.execute('INSERT INTO questions (question_text, answer, point_value, category_id) VALUES (?, ?, ?, ?)',
-                           (self.question_text, self.answer, self.point_value, self.category_id))
+            cursor.execute('INSERT INTO questions (question_text, answer, point_value, level, category_id) VALUES (?, ?, ?, ?, ?)',
+                           (self.question_text, self.answer, self.point_value, self.level, self.category_id))
             self.id = cursor.lastrowid
         else:
-            cursor.execute('UPDATE questions SET question_text = ?, answer = ?, point_value = ?, category_id = ? WHERE id = ?',
-                           (self.question_text, self.answer, self.point_value, self.category_id, self.id))
+            cursor.execute('UPDATE questions SET question_text = ?, answer = ?, point_value = ?, level = ?, category_id = ? WHERE id = ?',
+                           (self.question_text, self.answer, self.point_value, self.level, self.category_id, self.id))
         CONN.commit()
 
     def find_question_by_id(question_id):
@@ -47,23 +48,20 @@ class Question:
         cursor = CONN.cursor()
         cursor.execute("SELECT * FROM questions")
         rows = cursor.fetchall()
-        return [cls(row[1], row[2], row[3], row[4], row[0]) for row in rows]
+        return [cls(row[1], row[2], row[3], row[4], row[5], row[0]) for row in rows]
     
     @classmethod
-    def get_question_selection(cls, category_name, point_value):
-        # Retrieve a question based on category_id and point_value.
+    def get_questions_by_level(cls, level):
+        # Retrieve a list of questions based on point_value.
         cursor = CONN.cursor()
         cursor.execute("""SELECT * FROM questions 
-                        JOIN categories ON category.id = question.category_id
-                        WHERE name = ? AND point_value = ? 
-                        LIMIT 1
-                       """, (category_name, point_value))
-        question = cursor.fetchone()
+                        WHERE level = ? 
+                       """, (level,))
+        rows = cursor.fetchall()
 
-        if question:
+        if rows:
             # If a question is found, create a Question object and return it
-            question_id, question_text, answer, point_value, category_id = question
-            return cls(question_text, answer, point_value, category_id)
+            return [cls(row[1], row[2], row[3], row[4], row[5], row[0]) for row in rows]
         else:
             # If no question is found, return None
             return None
@@ -76,6 +74,7 @@ class Question:
                 question_text TEXT,
                 answer TEXT,
                 point_value INT,
+                level INT,
                 category_id INT
             )
         """
@@ -94,3 +93,4 @@ class Question:
 
     def find_question(self, points):
         return self if self.point_value == points else None
+    
