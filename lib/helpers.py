@@ -1,7 +1,11 @@
 # lib/helpers.py
+from models.User import User
+from models.Category import Category
+from models.Question import Question
 from rich.console import Console
 from rich.console import Theme
 from rich.table import Table
+import ipdb
 
 custom_theme = Theme({
     "heading": "bold bright_white",
@@ -49,7 +53,7 @@ def find_or_create_player():
         play_game(player)
 
 table = Table(title="Play the Zen of Jeopardy!")
-categories = ["JavaScript", "React", "Python", "SQL", "Computer Science", "Git"]
+categories = [category.name for category in Category.get_all()]
 for category in categories:
     table.add_column(category, style="heading")
 
@@ -63,17 +67,28 @@ def play_game(player):
     console.print(table)
     select_category(player)
 
+def check_answer(selected_question, answer):
+    print(answer)
+    if selected_question.answer == answer:
+        print("Great job!")
+        add_points()
+        
+
 def select_category(player):
     console.print("Select a question: ", style="subhead")
     selected_category = input("Type a category name: ")
     selected_question = input("Type a question amount: $")
-    select_question(selected_category, selected_question, player)
+    points = int(selected_question)
+    select_question(selected_category, points, player)
 
-def select_question(category, question, player):
-    print(category, player)
-    selected_question = Question.
-    print(selected_question)
+def select_question(category_name, points, player):
+    category = Category.find_by_name(category_name)
+    selected_question = next((question for question in category.category_questions() if question.point_value == points), None)
+    if selected_question:
+        console.print(selected_question.question_text, style="subhead")
+        answer = input("What is... ")
+        check_answer(selected_question, answer)
+    else:
+        print("No question found")
+        select_question(category_name, points, player)
 
-from models.User import User
-from models.Category import Category
-from models.Question import Question

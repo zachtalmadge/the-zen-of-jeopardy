@@ -2,8 +2,8 @@
 from models.__init__ import CONN
 
 class Question:
-    def __init__(self, question_text, answer, point_value, category_id):
-        self.id = None
+    def __init__(self, question_text, answer, point_value, category_id, id=None):
+        self.id = id
         self.question_text = question_text
         self.answer = answer
         self.point_value = point_value
@@ -41,23 +41,29 @@ class Question:
         question = cursor.fetchone()
         return question
 
-    def get_all():
+    @classmethod
+    def get_all(cls):
         # Retrieve all questions from the database.
         cursor = CONN.cursor()
         cursor.execute("SELECT * FROM questions")
-        questions = cursor.fetchall()
-        return questions
+        rows = cursor.fetchall()
+        return [cls(row[1], row[2], row[3], row[4], row[0]) for row in rows]
     
-    def get_question_selection(category_name, point_value):
+    @classmethod
+    def get_question_selection(cls, category_name, point_value):
         # Retrieve a question based on category_id and point_value.
         cursor = CONN.cursor()
-        cursor.execute("SELECT * FROM questions WHERE category_name = ? AND point_value = ? LIMIT 1", (category_name, point_value))
+        cursor.execute("""SELECT * FROM questions 
+                        JOIN categories ON category.id = question.category_id
+                        WHERE name = ? AND point_value = ? 
+                        LIMIT 1
+                       """, (category_name, point_value))
         question = cursor.fetchone()
 
         if question:
             # If a question is found, create a Question object and return it
             question_id, question_text, answer, point_value, category_id = question
-            return Question(question_text, answer, point_value, category_id)
+            return cls(question_text, answer, point_value, category_id)
         else:
             # If no question is found, return None
             return None
@@ -85,3 +91,6 @@ class Question:
         cursor = CONN.cursor()
         cursor.execute(sql)
         CONN.commit()
+
+    def find_question(self, points):
+        return self if self.point_value == points else None
