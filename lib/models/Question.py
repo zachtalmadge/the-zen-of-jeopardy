@@ -9,7 +9,6 @@ class Question:
         self.point_value = point_value
         self.category_id = category_id
 
-    @staticmethod
     def create_question(question_text, answer, point_value, category_id):
         # Create a new question in the database.
         cursor = CONN.cursor()
@@ -17,7 +16,6 @@ class Question:
                        (question_text, answer, point_value, category_id))
         CONN.commit()
 
-    @staticmethod
     def delete_question(question_id):
         # Delete a question from the database.
         cursor = CONN.cursor()
@@ -36,7 +34,6 @@ class Question:
                            (self.question_text, self.answer, self.point_value, self.category_id, self.id))
         CONN.commit()
 
-    @staticmethod
     def find_question_by_id(question_id):
         # Find a question by its ID.
         cursor = CONN.cursor()
@@ -44,13 +41,26 @@ class Question:
         question = cursor.fetchone()
         return question
 
-    @staticmethod
     def get_all():
         # Retrieve all questions from the database.
         cursor = CONN.cursor()
         cursor.execute("SELECT * FROM questions")
         questions = cursor.fetchall()
         return questions
+    
+    def get_question_selection(category_name, point_value):
+        # Retrieve a question based on category_id and point_value.
+        cursor = CONN.cursor()
+        cursor.execute("SELECT * FROM questions WHERE category_name = ? AND point_value = ? LIMIT 1", (category_name, point_value))
+        question = cursor.fetchone()
+
+        if question:
+            # If a question is found, create a Question object and return it
+            question_id, question_text, answer, point_value, category_id = question
+            return Question(question_text, answer, point_value, category_id)
+        else:
+            # If no question is found, return None
+            return None
     
     @classmethod
     def create_table(cls):
