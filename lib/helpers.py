@@ -44,6 +44,16 @@ def menu():
 def exit_program():
     console.print("Goodbye!", style="subhead")
     exit()
+    
+def view_rules():
+        console.print("Welcome to Jeopardy!", style="subhead")
+        console.print("Here are the rules:", style="subhead")
+        print("1. There are categories with questions of varying point values.")
+        print("2. Select a category and point value.")
+        print("3. Answer the question correctly to earn points.")
+        print("4. Incorrect answers result in point deduction.")
+        print("5. The player will earn a score at the end of the game.")
+        print("6. High scores will be added to the leaderboard.")
 
 def find_or_create_player():
     name = input("Enter your name: ").strip()

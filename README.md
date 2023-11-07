@@ -39,11 +39,9 @@ Upon starting the game, you will be presented with:
 2. A selection of categories to choose from.
 3. A board of questions with varying point values.
 
-To select a question, type the category and point value (e.g., `Science 200`).
+To select a question, type the category (e.g., `Javascript`) and then the desired point value (e.g. `200`)
 
-To answer a question, simply type in your answer after the prompt. Remember to phrase it in the form of a question!
-
-If you need help or wish to exit the game, type `help` or `exit` at any prompt.
+To answer a question, simply type in your answer after the prompt (No need to add the `What is..` as we provided it).
 
 ## Contributors
 
