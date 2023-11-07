@@ -117,13 +117,11 @@ def select_category(player, selected_category=None):
     points = int(selected_points)
     
     category = Category.find_by_name(selected_category)
-    print(category)
-    print([question.point_value for question in category.category_questions()])
     
-    # if points not in [200, 400, 600, 800, 1000]:
-    # if points not in [question.point_value for question in category.category_questions() if question.point_value]:
-    #     console.print('Invalid question amount!')
-    #     return select_category(player)
+    # if the user had already selected the points, restart the function
+    if points not in [question.point_value for question in category.category_questions() if question.point_value]:
+        console.print('Invalid question amount!')
+        return select_category(player)
     
     select_question(category, points, player)
 
