@@ -2,7 +2,8 @@ from helpers import (
     welcome,
     menu,
     exit_program,
-    find_or_create_player
+    find_or_create_player,
+    view_rules
 )
 
 def main():
@@ -13,6 +14,8 @@ def main():
             exit_program()
         elif choice == "1":
             find_or_create_player()
+        elif choice == "3":
+            view_rules()
         else:
             print("Invalid choice")
         
