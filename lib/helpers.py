@@ -78,10 +78,14 @@ def play_game(player):
     make_table()
     select_category(player)
 
+def add_points(selected_question, player):
+    player.score + selected_question.point_value
+    player.update()
+
 def check_answer(selected_question, answer, player):
     if selected_question.answer == answer:
         console.print("Great job!", style="subhead")
-        # add_points(player)
+        add_points(selected_question, player)
     else:
         console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
     selected_question.point_value = " "
@@ -95,7 +99,7 @@ def select_category(player):
     selected_category = input("Type a category name: ")
     
     # if input category is not one of our categories, re-run the function
-    if select_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
+    if selected_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
         console.print('Invalid category selection!')
         return select_category(player)
     
