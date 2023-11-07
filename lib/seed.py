@@ -14,12 +14,12 @@ def create_tables():
     Question.create_table()
 
 def seed_jeopardy_board():
-    js_category = Category.create("Javascript")
-    react_category = Category.create("React")
-    python_category = Category.create("Python")
-    sql_category = Category.create("SQL")
-    comp_sci_category = Category.create("Comp Sci")
-    git_category = Category.create("Git")
+    js_category = Category.create("javascript")
+    react_category = Category.create("react")
+    python_category = Category.create("python")
+    sql_category = Category.create("sql")
+    comp_sci_category = Category.create("comp sci")
+    git_category = Category.create("git")
     
     js_q1 = Question.create_question('This data type is used to store true or false values', 'boolean', 200, 1,  js_category.id)
     js_q2 = Question.create_question('This operator is used to compare both value and type.', 'strict equality operator', 400, 2, js_category.id)

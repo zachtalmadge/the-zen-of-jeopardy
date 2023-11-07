@@ -1,6 +1,4 @@
 # lib/helpers.py
-import time
-import threading
 from models.User import User
 from models.Category import Category
 from models.Question import Question
@@ -18,9 +16,6 @@ custom_theme = Theme({
 })
 
 console = Console(theme=custom_theme)
-user_answer = None
-answer_submitted = False
-timer_completed = False
 
 def welcome():
     console.print("""
@@ -48,9 +43,7 @@ def exit_program():
     exit()
 
 def find_or_create_player():
-
     name = input("Enter your name: ").strip()
-    
     player = User.find_by_name(name)
 
     if player is None:
@@ -67,7 +60,7 @@ def make_table():
     categories = [category.name for category in Category.get_all()]
     
     for category in categories:
-        table.add_column(category, style="table_head")
+        table.add_column(category.title(), style="table_head")
 
     for num in range(1,6):
         row = [question.point_value for question in Question.get_questions_by_level(num)]
@@ -121,54 +114,17 @@ def select_category(player):
     
     select_question(category, points, player)
 
-def countdown_timer():
-    global timer_completed
-    time_left = 10
-    while time_left > 0 and not timer_completed:
-        time_left -= 1
-        time.sleep(1)
-    timer_completed = True
-
-def get_user_input():
-    global user_answer, answer_submitted
-    user_answer = input("What is... ")
-    answer_submitted = True
-
 def select_question(category, points, player):
       
     selected_question = next((question for question in category.category_questions() 
                               if question.point_value == points), None)
     
     if selected_question:
-        global user_answer, timer_completed
-
-        # Start the countdown timer in a separate thread
-        timer_thread = threading.Thread(target=countdown_timer)
-        timer_thread.start()
-
-        # Initialize time_left
-        console.print(f"You have 10 seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
+        user_answer = input("What is... ")
 
-        # Start a thread to capture user input
-        input_thread = threading.Thread(target=get_user_input)
-        input_thread.start()
-
-        # Wait for the timer thread to finish
-        timer_thread.join()
-
-        # Check if the timer completed or the user submitted an answer
-        if timer_completed:
-            console.print("\nTime's up!", style="subhead")
-            # console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
-            user_answer = "" # Set the answer as empty
-            check_answer(selected_question, user_answer, player)
-            
-        # Wait for the input thread to finish
-        input_thread.join()
+        check_answer(selected_question, user_answer, player)
 
     else:
         console.print("No question found")
-        select_category(player)
-
         select_category(player)
