@@ -24,8 +24,8 @@ def seed_jeopardy_board():
     js_q1 = Question.create_question('This data type is used to store true or false values', 'boolean', 200, 1,  js_category.id)
     js_q2 = Question.create_question('This operator is used to compare both value and type.', 'strict equality operator', 400, 2, js_category.id)
     js_q3 = Question.create_question('This global function parses a string argument and returns an integer of the specified radix or base.', 'parseInt', 600, 3, js_category.id)
-    js_q4 = Question.create_question('This data type is used to store true or false values', 'boolean', 800, 4, js_category.id)
-    js_q5 = Question.create_question('This data type is used to store true or false values', 'boolean', 1000, 5, js_category.id)
+    js_q4 = Question.create_question('This term refers to a feature in JavaScript and other programming languages where a function retains access to its lexical scope even when it\'s invoked outside of that scope.', 'closure', 800, 4, js_category.id)
+    js_q5 = Question.create_question('Everything in JavaScript that is not a primitive value is this', 'object', 1000, 5, js_category.id)
         
     react_q1 = Question.create_question('This React-specific syntax allows you to write HTML structures within JavaScript code.', 'JSX', 200, 1, react_category.id)
     react_q2 = Question.create_question('This React feature allows you to return multiple elements from a component’s render method without creating an additional DOM element.', 'fragments', 400, 2, react_category.id)

@@ -175,6 +175,4 @@ def select_question(category, points, player):
         console.print("No question found")
         select_category(player)
 
-        # call select_category again but 
-        # with the selected category already passed in as arg
         select_category(player)
