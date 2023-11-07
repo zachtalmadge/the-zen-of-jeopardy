@@ -84,7 +84,7 @@ def check_answer(selected_question, answer, player):
         # add_points(player)
     else:
         console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
-    selected_question.point_value = " "
+    selected_question.point_value = ""
     selected_question.save()
     play_game(player)
 
@@ -108,11 +108,15 @@ def select_category(player, selected_category=None):
     selected_points = input("Type a question amount: $")
     points = int(selected_points)
     
-    if points not in [200, 400, 600, 800, 1000]:
+    category = Category.find_by_name(selected_points)
+    # [question.point_value for question in category.category_questions() if question.point_value]
+    
+    # if points not in [200, 400, 600, 800, 1000]:
+    if points not in [question.point_value for question in category.category_questions() if question.point_value]:
         console.print('Invalid question amount!')
         return select_category(player)
     
-    select_question(selected_category, points, player)
+    select_question(category, points, player)
 
 def countdown_timer():
     global user_answer, answer_submitted, time_left
@@ -129,10 +133,8 @@ def get_user_input():
     user_answer = input("What is... ")
     answer_submitted = True
 
-def select_question(category_name, points, player):
-    
-    category = Category.find_by_name(category_name)
-    
+def select_question(category, points, player):
+      
     selected_question = next((question for question in category.category_questions() 
                               if question.point_value == points), None)
     
@@ -165,4 +167,4 @@ def select_question(category_name, points, player):
 
         # call select_category again but 
         # with the selected category already passed in as arg
-        select_category(player, category_name)
+        select_category(player)
