@@ -5,6 +5,7 @@ from models.Question import Question
 from rich.console import Console
 from rich.console import Theme
 from rich.table import Table
+import random
 import ipdb
 
 custom_theme = Theme({
@@ -74,8 +75,12 @@ def play_game(player):
     make_table()
     select_category(player)
 
-def add_points(selected_question, player):
-    player.score += selected_question.point_value
+def add_points(selected_question, player, doubleJeopardy):
+    if doubleJeopardy:
+        player.score += selected_question.point_value * 2
+    else:
+        player.score += selected_question.point_value
+    
     player.update()
     
 def end_game(player):
@@ -83,12 +88,12 @@ def end_game(player):
     console.print(f"Congratulations! Your score is {player.score}!")
     question_count = 0
 
-def check_answer(selected_question, answer, player):
+def check_answer(selected_question, answer, player, doubleJeopardy):
     global question_count
 
     if selected_question.answer == answer:
         console.print("Great job!", style="subhead")
-        add_points(selected_question, player)
+        add_points(selected_question, player, doubleJeopardy)
     else:
         console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
     selected_question.point_value = ""
@@ -136,10 +141,19 @@ def select_question(category, points, player):
                               if question.point_value == points), None)
     
     if selected_question:
+        
+        # randomly decide if question will be a double jeopardy
+        doubleJeopardy = False
+        
+        # 8% chance that double jeopardy will be be invoked
+        if random.randint(1, 100) <= 8:
+            console.print('DOUBLE JEOPARDY!!!', style="subhead")
+            doubleJeopardy = True
+        
         console.print(selected_question.question_text, style="subhead")
         user_answer = input("What is... ")
 
-        check_answer(selected_question, user_answer, player)
+        check_answer(selected_question, user_answer, player, doubleJeopardy)
 
     else:
         console.print("No question found")
