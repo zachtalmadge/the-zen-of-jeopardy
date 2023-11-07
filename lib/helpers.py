@@ -42,7 +42,9 @@ def exit_program():
     exit()
 
 def find_or_create_player():
+
     name = input("Enter your name: ").strip()
+    
     player = User.find_by_name(name)
 
     if player is None:
@@ -55,7 +57,9 @@ def find_or_create_player():
 
 def make_table():
     table = Table(title="Play the Zen of Jeopardy!", border_style="black")
+
     categories = [category.name for category in Category.get_all()]
+    
     for category in categories:
         table.add_column(category, style="heading")
 
@@ -80,15 +84,33 @@ def check_answer(selected_question, answer, player):
     play_game(player)
 
 def select_category(player):
+    
     console.print("Select a question: ", style="subhead")
+    
     selected_category = input("Type a category name: ")
+    
+    # if input category is not one of our categories, re-run the function
+    if select_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
+        console.print('Invalid category selection!')
+        return select_category(player)
+    
+    # if input points it not a valid point value, re-run the function
     selected_points = input("Type a question amount: $")
     points = int(selected_points)
+    
+    if points not in [200, 400, 600, 800, 1000]:
+        console.print('Invalid question amount!')
+        return select_category(player)
+    
     select_question(selected_category, points, player)
 
 def select_question(category_name, points, player):
+    
     category = Category.find_by_name(category_name)
-    selected_question = next((question for question in category.category_questions() if question.point_value == points), None)
+    
+    selected_question = next((question for question in category.category_questions() 
+                              if question.point_value == points), None)
+    
     if selected_question:
         console.print(selected_question.question_text, style="subhead")
         answer = input("What is... ")
@@ -96,4 +118,3 @@ def select_question(category_name, points, player):
     else:
         print("No question found")
         select_question(category_name, points, player)
-
