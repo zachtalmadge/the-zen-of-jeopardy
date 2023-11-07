@@ -95,7 +95,7 @@ def select_category(player):
     selected_category = input("Type a category name: ")
     
     # if input category is not one of our categories, re-run the function
-    if select_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
+    if selected_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
         console.print('Invalid category selection!')
         return select_category(player)
     
