@@ -1,4 +1,6 @@
 # lib/helpers.py
+import time
+import threading
 from models.User import User
 from models.Category import Category
 from models.Question import Question
@@ -14,6 +16,9 @@ custom_theme = Theme({
 })
 
 console = Console(theme=custom_theme)
+user_answer = None
+answer_submitted = False
+time_left = 10
 
 def welcome():
     console.print("""
@@ -97,14 +102,49 @@ def select_category(player):
     points = int(selected_points)
     select_question(selected_category, points, player)
 
+def countdown_timer():
+    global user_answer, answer_submitted, time_left
+    time_left = 10
+    while time_left > 0 and not answer_submitted:
+        time_left -= 1
+        time.sleep(1)
+    
+    if not answer_submitted:
+        user_answer = None
+
+def get_user_input():
+    global user_answer, answer_submitted
+    user_answer = input("What is... ")
+    answer_submitted = True
+
 def select_question(category_name, points, player):
     category = Category.find_by_name(category_name)
     selected_question = next((question for question in category.category_questions() if question.point_value == points), None)
+    
     if selected_question:
+        global user_answer, answer_submitted, time_left
+        
+        # Start the countdown timer in a separate thread
+        timer_thread = threading.Thread(target=countdown_timer)
+        timer_thread.start()
+        
+        # Initialize time_left
+        console.print(f"You have {time_left} seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
-        answer = input("What is... ")
-        check_answer(selected_question, answer, player)
+        
+        # Start a thread to capture user input
+        input_thread = threading.Thread(target=get_user_input)
+        input_thread.start()
+        
+        # Wait for both threads to finish
+        timer_thread.join()
+        input_thread.join()
+        
+        # Check the user's answer
+        if user_answer is None:
+            console.print("\nTime's up!", style="subhead")
+        else:
+            check_answer(selected_question, user_answer, player)
     else:
-        print("No question found")
+        console.print("No question found")
         select_question(category_name, points, player)
-
