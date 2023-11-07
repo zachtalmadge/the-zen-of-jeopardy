@@ -88,16 +88,21 @@ def check_answer(selected_question, answer, player):
     selected_question.save()
     play_game(player)
 
-def select_category(player):
+def select_category(player, selected_category=None):
     
-    console.print("Select a question: ", style="subhead")
+    # if the function is called with selected_category argument passed in, 
+    # ask the user to select a category
+    if not select_category:
     
-    selected_category = input("Type a category name: ")
-    
-    # if input category is not one of our categories, re-run the function
-    if selected_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
-        console.print('Invalid category selection!')
-        return select_category(player)
+        console.print("Select a question: ", style="subhead")
+        
+        # re-assign selected_category from None to input 
+        selected_category = input("Type a category name: ")
+        
+        # if input category is not one of our categories, re-run the function
+        if selected_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
+            console.print('Invalid category selection!')
+            return select_category(player)
     
     # if input points it not a valid point value, re-run the function
     selected_points = input("Type a question amount: $")
@@ -158,4 +163,6 @@ def select_question(category_name, points, player):
     else:
         console.print("No question found")
 
-        select_question(category_name, points, player)
+        # call select_category again but 
+        # with the selected category already passed in as arg
+        select_category(player, category_name)
