@@ -111,11 +111,10 @@ def select_category(player):
 
 def countdown_timer():
     global user_answer, answer_submitted, time_left
+    time_left = 10
     while time_left > 0 and not answer_submitted:
-        console.print(f"You have {time_left} seconds to answer the question.", style="subhead", end='\r')  # Use '\r' to overwrite the previous line
         time_left -= 1
         time.sleep(1)
-    console.print("")
 
 def get_user_input():
     global user_answer, answer_submitted
