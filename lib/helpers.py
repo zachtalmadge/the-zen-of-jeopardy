@@ -12,7 +12,8 @@ import ipdb
 custom_theme = Theme({
     "heading": "bold bright_white",
     "subhead": "bold gold3",
-    "tile": "bold gold3 on blue1"
+    "tile": "bold gold3 on blue1",
+    # "table": "(1,1) show_lines=True on blue1"
 })
 
 console = Console(theme=custom_theme)
@@ -46,7 +47,9 @@ def exit_program():
     exit()
 
 def find_or_create_player():
+
     name = input("Enter your name: ").strip()
+    
     player = User.find_by_name(name)
 
     if player is None:
@@ -58,26 +61,17 @@ def find_or_create_player():
         play_game(player)
 
 def make_table():
-    table = Table(title="Play the Zen of Jeopardy!")
+    table = Table(title="Play the Zen of Jeopardy!", border_style="black")
+
     categories = [category.name for category in Category.get_all()]
+    
     for category in categories:
         table.add_column(category, style="heading")
 
-    first_row = [question.point_value for question in Question.get_questions_by_level(1)]
-    table.add_row(f"${first_row[0]}", f"${first_row[1]}", f"${first_row[2]}", f"${first_row[3]}", f"${first_row[4]}", f"${first_row[5]}", style="tile")
-    
-    second_row = [question.point_value for question in Question.get_questions_by_level(2)]
-    table.add_row(f"${second_row[0]}", f"${second_row[1]}", f"${second_row[2]}", f"${second_row[3]}", f"${second_row[4]}", f"${second_row[5]}", style="tile")
-    
-    third_row = [question.point_value for question in Question.get_questions_by_level(3)]
-    table.add_row(f"${third_row[0]}", f"${third_row[1]}", f"${third_row[2]}", f"${third_row[3]}", f"${third_row[4]}", f"${third_row[5]}", style="tile")
-    
-    fourth_row = [question.point_value for question in Question.get_questions_by_level(4)]
-    table.add_row(f"${fourth_row[0]}", f"${fourth_row[1]}", f"${fourth_row[2]}", f"${fourth_row[3]}", f"${fourth_row[4]}", f"${fourth_row[5]}", style="tile")
-    
-    fifth_row = [question.point_value for question in Question.get_questions_by_level(5)]
-    table.add_row(f"${fifth_row[0]}", f"${fifth_row[1]}", f"${fifth_row[2]}", f"${fifth_row[3]}", f"${fifth_row[4]}", f"${fifth_row[5]}", style="tile")
-    
+    for num in range(1,6):
+        row = [question.point_value for question in Question.get_questions_by_level(num)]
+        table.add_row(f"${row[0]}", f"${row[1]}", f"${row[2]}", f"${row[3]}", f"${row[4]}", f"${row[5]}", style="tile")
+        
     console.print(table)
     
 def play_game(player):
@@ -94,12 +88,25 @@ def check_answer(selected_question, answer, player):
     selected_question.save()
     play_game(player)
 
-
 def select_category(player):
+    
     console.print("Select a question: ", style="subhead")
+    
     selected_category = input("Type a category name: ")
+    
+    # if input category is not one of our categories, re-run the function
+    if select_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
+        console.print('Invalid category selection!')
+        return select_category(player)
+    
+    # if input points it not a valid point value, re-run the function
     selected_points = input("Type a question amount: $")
     points = int(selected_points)
+    
+    if points not in [200, 400, 600, 800, 1000]:
+        console.print('Invalid question amount!')
+        return select_category(player)
+    
     select_question(selected_category, points, player)
 
 def countdown_timer():
@@ -118,8 +125,11 @@ def get_user_input():
     answer_submitted = True
 
 def select_question(category_name, points, player):
+    
     category = Category.find_by_name(category_name)
-    selected_question = next((question for question in category.category_questions() if question.point_value == points), None)
+    
+    selected_question = next((question for question in category.category_questions() 
+                              if question.point_value == points), None)
     
     if selected_question:
         global user_answer, answer_submitted, time_left
@@ -147,4 +157,5 @@ def select_question(category_name, points, player):
             check_answer(selected_question, user_answer, player)
     else:
         console.print("No question found")
+
         select_question(category_name, points, player)
