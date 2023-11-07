@@ -10,7 +10,8 @@ import ipdb
 custom_theme = Theme({
     "heading": "bold bright_white",
     "subhead": "bold gold3",
-    "tile": "bold gold3 on blue1"
+    "tile": "bold gold3 on blue1",
+    # "table": "(1,1) show_lines=True on blue1"
 })
 
 console = Console(theme=custom_theme)
@@ -53,26 +54,15 @@ def find_or_create_player():
         play_game(player)
 
 def make_table():
-    table = Table(title="Play the Zen of Jeopardy!")
+    table = Table(title="Play the Zen of Jeopardy!", border_style="black")
     categories = [category.name for category in Category.get_all()]
     for category in categories:
         table.add_column(category, style="heading")
 
-    first_row = [question.point_value for question in Question.get_questions_by_level(1)]
-    table.add_row(f"${first_row[0]}", f"${first_row[1]}", f"${first_row[2]}", f"${first_row[3]}", f"${first_row[4]}", f"${first_row[5]}", style="tile")
-    
-    second_row = [question.point_value for question in Question.get_questions_by_level(2)]
-    table.add_row(f"${second_row[0]}", f"${second_row[1]}", f"${second_row[2]}", f"${second_row[3]}", f"${second_row[4]}", f"${second_row[5]}", style="tile")
-    
-    third_row = [question.point_value for question in Question.get_questions_by_level(3)]
-    table.add_row(f"${third_row[0]}", f"${third_row[1]}", f"${third_row[2]}", f"${third_row[3]}", f"${third_row[4]}", f"${third_row[5]}", style="tile")
-    
-    fourth_row = [question.point_value for question in Question.get_questions_by_level(4)]
-    table.add_row(f"${fourth_row[0]}", f"${fourth_row[1]}", f"${fourth_row[2]}", f"${fourth_row[3]}", f"${fourth_row[4]}", f"${fourth_row[5]}", style="tile")
-    
-    fifth_row = [question.point_value for question in Question.get_questions_by_level(5)]
-    table.add_row(f"${fifth_row[0]}", f"${fifth_row[1]}", f"${fifth_row[2]}", f"${fifth_row[3]}", f"${fifth_row[4]}", f"${fifth_row[5]}", style="tile")
-    
+    for num in range(1,6):
+        row = [question.point_value for question in Question.get_questions_by_level(num)]
+        table.add_row(f"${row[0]}", f"${row[1]}", f"${row[2]}", f"${row[3]}", f"${row[4]}", f"${row[5]}", style="tile")
+        
     console.print(table)
     
 def play_game(player):
@@ -88,7 +78,6 @@ def check_answer(selected_question, answer, player):
     selected_question.point_value = " "
     selected_question.save()
     play_game(player)
-
 
 def select_category(player):
     console.print("Select a question: ", style="subhead")
