@@ -11,9 +11,10 @@ import ipdb
 
 custom_theme = Theme({
     "heading": "bold bright_white",
+    "table_head": "bold bright_white on blue1",
     "subhead": "bold gold3",
     "tile": "bold gold3 on blue1",
-    # "table": "(1,1) show_lines=True on blue1"
+    "table": "on blue1"
 })
 
 console = Console(theme=custom_theme)
@@ -61,12 +62,12 @@ def find_or_create_player():
         play_game(player)
 
 def make_table():
-    table = Table(title="Play the Zen of Jeopardy!", border_style="black")
+    table = Table(title="Play the Zen of Jeopardy!", border_style="black", show_lines=True, style="table")
 
     categories = [category.name for category in Category.get_all()]
     
     for category in categories:
-        table.add_column(category, style="heading")
+        table.add_column(category, style="table_head")
 
     for num in range(1,6):
         row = [question.point_value for question in Question.get_questions_by_level(num)]
@@ -79,8 +80,11 @@ def play_game(player):
     select_category(player)
 
 def add_points(selected_question, player):
-    player.score + selected_question.point_value
+    player.score += selected_question.point_value
     player.update()
+    
+def end_game(player):
+    pass
 
 def check_answer(selected_question, answer, player):
     if selected_question.answer == answer:
@@ -88,7 +92,7 @@ def check_answer(selected_question, answer, player):
         add_points(selected_question, player)
     else:
         console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
-    selected_question.point_value = " "
+    selected_question.point_value = ""
     selected_question.save()
     play_game(player)
 
@@ -161,5 +165,4 @@ def select_question(category_name, points, player):
             check_answer(selected_question, user_answer, player)
     else:
         console.print("No question found")
-
-        select_question(category_name, points, player)
+        select_category(player)
