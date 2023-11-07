@@ -92,7 +92,7 @@ def select_category(player, selected_category=None):
     
     # if the function is called with selected_category argument passed in, 
     # ask the user to select a category
-    if not select_category:
+    if selected_category is None:
     
         console.print("Select a question: ", style="subhead")
         
@@ -108,13 +108,14 @@ def select_category(player, selected_category=None):
     selected_points = input("Type a question amount: $")
     points = int(selected_points)
     
-    category = Category.find_by_name(selected_points)
-    # [question.point_value for question in category.category_questions() if question.point_value]
+    category = Category.find_by_name(selected_category)
+    print(category)
+    print([question.point_value for question in category.category_questions()])
     
     # if points not in [200, 400, 600, 800, 1000]:
-    if points not in [question.point_value for question in category.category_questions() if question.point_value]:
-        console.print('Invalid question amount!')
-        return select_category(player)
+    # if points not in [question.point_value for question in category.category_questions() if question.point_value]:
+    #     console.print('Invalid question amount!')
+    #     return select_category(player)
     
     select_question(category, points, player)
 
