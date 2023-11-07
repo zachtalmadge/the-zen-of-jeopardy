@@ -105,6 +105,10 @@ def select_category(player):
     selected_points = input("Type a question amount: $")
     points = int(selected_points)
     
+    if not isinstance(points, int):
+        print('You must input a valid number!')
+        return select_category(player)
+    
     category = Category.find_by_name(selected_category)
     
     # if the user had already selected the points, restart the function
