@@ -96,26 +96,36 @@ def check_answer(selected_question, answer, player):
     selected_question.save()
     play_game(player)
 
-def select_category(player):
+def select_category(player, selected_category=None):
     
-    console.print("Select a question: ", style="subhead")
+    # if the function is called with selected_category argument passed in, 
+    # ask the user to select a category
+    if selected_category is None:
     
-    selected_category = input("Type a category name: ")
-    
-    # if input category is not one of our categories, re-run the function
-    if selected_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
-        console.print('Invalid category selection!')
-        return select_category(player)
+        console.print("Select a question: ", style="subhead")
+        
+        # re-assign selected_category from None to input 
+        selected_category = input("Type a category name: ")
+        
+        # if input category is not one of our categories, re-run the function
+        if selected_category.lower() not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
+            console.print('Invalid category selection!')
+            return select_category(player)
     
     # if input points it not a valid point value, re-run the function
     selected_points = input("Type a question amount: $")
     points = int(selected_points)
     
-    if points not in [200, 400, 600, 800, 1000]:
-        console.print('Invalid question amount!')
-        return select_category(player)
+    category = Category.find_by_name(selected_category)
+    print(category)
+    print([question.point_value for question in category.category_questions()])
     
-    select_question(selected_category, points, player)
+    # if points not in [200, 400, 600, 800, 1000]:
+    # if points not in [question.point_value for question in category.category_questions() if question.point_value]:
+    #     console.print('Invalid question amount!')
+    #     return select_category(player)
+    
+    select_question(category, points, player)
 
 def countdown_timer():
     global timer_completed
@@ -130,10 +140,8 @@ def get_user_input():
     user_answer = input("What is... ")
     answer_submitted = True
 
-def select_question(category_name, points, player):
-    
-    category = Category.find_by_name(category_name)
-    
+def select_question(category, points, player):
+      
     selected_question = next((question for question in category.category_questions() 
                               if question.point_value == points), None)
     
@@ -169,3 +177,6 @@ def select_question(category_name, points, player):
         console.print("No question found")
         select_category(player)
 
+        # call select_category again but 
+        # with the selected category already passed in as arg
+        select_category(player)
