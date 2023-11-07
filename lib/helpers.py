@@ -17,6 +17,8 @@ custom_theme = Theme({
 
 console = Console(theme=custom_theme)
 
+question_count = 0
+
 def welcome():
     console.print("""
          _____ _          _____                ___ 
@@ -77,9 +79,13 @@ def add_points(selected_question, player):
     player.update()
     
 def end_game(player):
-    pass
+    global question_count
+    console.print(f"Congratulations! Your score is {player.score}!")
+    question_count = 0
 
 def check_answer(selected_question, answer, player):
+    global question_count
+
     if selected_question.answer == answer:
         console.print("Great job!", style="subhead")
         add_points(selected_question, player)
@@ -87,7 +93,12 @@ def check_answer(selected_question, answer, player):
         console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
     selected_question.point_value = ""
     selected_question.save()
-    play_game(player)
+
+    question_count += 1
+    if question_count < 30:
+        play_game(player)
+    else:
+        end_game(player)
 
 def select_category(player):
 
