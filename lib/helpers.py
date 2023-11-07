@@ -19,7 +19,7 @@ custom_theme = Theme({
 console = Console(theme=custom_theme)
 user_answer = None
 answer_submitted = False
-time_left = 10
+timer_completed = False
 
 def welcome():
     console.print("""
@@ -110,14 +110,12 @@ def select_category(player):
     select_question(selected_category, points, player)
 
 def countdown_timer():
-    global user_answer, answer_submitted, time_left
+    global timer_completed
     time_left = 10
-    while time_left > 0 and not answer_submitted:
+    while time_left > 0 and not timer_completed:
         time_left -= 1
         time.sleep(1)
-    
-    if not answer_submitted:
-        user_answer = None
+    timer_completed = True
 
 def get_user_input():
     global user_answer, answer_submitted
@@ -132,30 +130,32 @@ def select_question(category_name, points, player):
                               if question.point_value == points), None)
     
     if selected_question:
-        global user_answer, answer_submitted, time_left
-        
+        global user_answer, timer_completed
+
         # Start the countdown timer in a separate thread
         timer_thread = threading.Thread(target=countdown_timer)
         timer_thread.start()
-        
+
         # Initialize time_left
-        console.print(f"You have {time_left} seconds to answer the question.", style="subhead")
+        console.print(f"You have 10 seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
-        
+
         # Start a thread to capture user input
         input_thread = threading.Thread(target=get_user_input)
         input_thread.start()
-        
-        # Wait for both threads to finish
+
+        # Wait for the timer thread to finish
         timer_thread.join()
-        input_thread.join()
-        
-        # Check the user's answer
-        if user_answer is None:
+
+        # Check if the timer completed or the user submitted an answer
+        if timer_completed:
             console.print("\nTime's up!", style="subhead")
-        else:
+            # console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
+            user_answer = "" # Set the answer as empty
             check_answer(selected_question, user_answer, player)
+            
+        # Wait for the input thread to finish
+        input_thread.join()
+
     else:
         console.print("No question found")
-
-        select_question(category_name, points, player)
