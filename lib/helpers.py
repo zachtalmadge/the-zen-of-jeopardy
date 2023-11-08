@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.console import Theme
 from rich.table import Table
 import random
+from threading import Timer
 import ipdb
 
 custom_theme = Theme({
@@ -186,24 +187,37 @@ def select_question(category, points, player):
                               if question.point_value == points), None)
     
     if selected_question:
-        
-        # randomly decide if question will be a double jeopardy
         doubleJeopardy = False
+         # Create a 10-second timer
+        timer = Timer(10, timer_expired, args=(selected_question, player, doubleJeopardy))
+        timer.start()
         
-        # 8% chance that double jeopardy will be be invoked
         if random.randint(1, 100) <= 8:
             console.print('DOUBLE JEOPARDY!!!', style="subhead")
             doubleJeopardy = True
         
+        console.print("You have 10 seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
         user_answer = input("What is... ").strip()
+        if user_answer:
+            timer.cancel()
 
         if user_answer in EXIT_WORDS:
+            timer.cancel()
             exit_program()
-
-        check_answer(selected_question, user_answer, player, doubleJeopardy)
+        
 
     else:
         console.print("No question found")
         select_category(player)
         
+    check_answer(selected_question, user_answer, player, doubleJeopardy)
+
+def timer_expired(selected_question, player, doubleJeopardy):
+    console.print("Time's up!", style="subhead")
+    user_answer = ""
+    check_answer(selected_question, user_answer, player, doubleJeopardy)
+
+    if user_answer in EXIT_WORDS:
+        exit_program()
+    
