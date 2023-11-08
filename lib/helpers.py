@@ -159,16 +159,17 @@ def select_category(player):
 
     # if input points it not a valid point value, re-run the function
     selected_points = input("Type a question amount: $").strip()
-
-    if selected_points in EXIT_WORDS:
-        exit_program()
-
-    points = int(selected_points)
     
-    if not isinstance(points, int):
+    try:
+        if selected_points in EXIT_WORDS:
+            exit_program()
+
+        points = int(selected_points)
+    
+    except:
         print('You must input a valid number!')
-        return select_category(player)
-    
+        select_category(player)
+        
     category = Category.find_by_name(selected_category)
     
     # if the user had already selected the points, restart the function
