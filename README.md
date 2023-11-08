@@ -14,15 +14,15 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
 
 1. Clone the repository to your local machine:
    ```
-   git clone https://github.com/your-username/TheZenOfJeopardy.git
+   git clone https://github.com/your-username/the-zen-of-jeopardy.git
    ```
 2. Navigate to the cloned directory:
    ```
-   cd TheZenOfJeopardy
+   cd the-zen-of-jeopardy
    ```
-3. Install the necessary dependencies:
+3. Install the necessary dependencies and enter Python shell:
    ```
-   pip install -r requirements.txt
+   pipenv install && pipenv shell
    ```
 
 ## How to Use
@@ -30,24 +30,42 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
 After installation, you can run The Zen of Jeopardy! with the following command from the terminal:
 
 ```
-python jeopardy.py
+python lib/cli.py
 ```
 
-Upon starting the game, you will be presented with:
+Upon starting the game, you will be presented with a menu:
 
-1. Instructions on how to play.
-2. A selection of categories to choose from.
-3. A board of questions with varying point values.
+0. Exit the program
+1. Play a game
+2. View scoreboard
+3. View rules
+4. Reset game
 
-To select a question, type the category (e.g., `Javascript`) and then the desired point value (e.g. `200`)
+If you need to brush up on the rules, enter 3. 
+
+If you are a new or returning player, enter 1. Your profile will be retrieved or a new one will be created for you, and the game will begin!
+
+A board containing the categories and questions will appear on screen.
+
+To select a question, type the category (e.g., `Javascript`), and then the desired point value (e.g. `200`) when prompted.
+
+A timer will start as soon as your question is selected, so be ready!
 
 To answer a question, simply type in your answer after the prompt (No need to add the `What is..` as we provided it).
+
+Once a question is answered, its square on the board will be cleared and you will be unable to select it again.
+
+Once all questions have been answered, check your final score!
+
+Head over to the scoreboard to view the leaders with the highest scores!
+
+Select option 4 from the menu to reset the game and play again.
 
 ## Contributors
 
 A special thanks to the individuals who have contributed to making The Zen of Jeopardy! a fun and educational experience:
 
-- Kat Tanehill
+- Kat Tannehill
 - Wesley Smith
 - Zachary Talmadge
 
