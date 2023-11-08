@@ -32,7 +32,7 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
 
 ## How to Use
 
-After installation, you can run The Zen of Jeopardy! with the following commands from the terminal:
+After installation, you can run The Zen of Jeopardy! with the following commands from the terminal (seed file only needs to be run first time program is used):
 
 ```
 python lib/seed.py
