@@ -25,7 +25,6 @@ def main():
             resetGame()
         else:
             print("Invalid choice")
-         # implement reset option
         
 if __name__ == "__main__":
     welcome()
