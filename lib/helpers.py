@@ -88,6 +88,9 @@ def view_scoreboard():
     
 def delete_user():
     name = input("Enter your name: ").strip()
+
+    if name.lower() in EXIT_WORDS:
+        exit_program()
     
     player = User.find_by_name(name)
     if player:
@@ -223,12 +226,10 @@ def select_question(category, points, player):
 
         if not timer_expired_flag:
             timer.cancel()
-        
 
         if user_answer in EXIT_WORDS:
             timer.cancel()
             exit_program()
-        
 
     else:
         console.print("You've already answered that one! Please pick another one.")
