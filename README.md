@@ -61,13 +61,15 @@ A board containing the categories and questions will appear on screen.
 
 To select a question, type the category (e.g., `Javascript`), and then the desired point value (e.g. `200`) when prompted.
 
-A timer will start as soon as your question is selected, so be ready!
+A timer will start as soon as your question is selected, so be ready! Questions are randomly worth Double Jeopardy!
 
 To answer a question, simply type in your answer after the prompt (No need to add the `What is..` as we provided it).
 
 Once a question is answered, its square on the board will be cleared and you will be unable to select it again.
 
 ![1_iviuRQGdOIwnXGsqYAfccg](https://github.com/zachtalmadge/the-zen-of-jeopardy/assets/139499376/48b2b265-02cb-487f-a3a5-38b4a4c41f4d)
+
+At any point you may type 0, exit, or quit to end the program. Your progress will be saved.
 
 Once all questions have been answered, check your final score!
 
