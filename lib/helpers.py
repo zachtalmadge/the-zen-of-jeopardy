@@ -40,6 +40,7 @@ def menu():
     print("1. Play a game")
     print("2. View scoreboard")
     print("3. View rules")
+    print("4. Reset game")
 
 def exit_program():
     console.print("Goodbye!", style="subhead")
@@ -146,7 +147,6 @@ def select_category(player):
 
     console.print("Select a question: ", style="subhead")
     
-    # re-assign selected_category from None to input 
     selected_category = input("Type a category name: ").strip()
     selected_category = selected_category.lower()
 
@@ -174,7 +174,7 @@ def select_category(player):
         
     category = Category.find_by_name(selected_category)
     
-    # if the user had already selected the points, restart the function
+    # if player enters an invalid question amount
     if points not in [question.point_value for question in category.category_questions() if question.point_value]:
         console.print('Invalid question amount!')
         return select_category(player)
@@ -188,7 +188,6 @@ def select_question(category, points, player):
     
     if selected_question:
         
-        # randomly decide if question will be a double jeopardy
         doubleJeopardy = False
         
         # 8% chance that double jeopardy will be set to True
@@ -205,6 +204,6 @@ def select_question(category, points, player):
         check_answer(selected_question, user_answer, player, doubleJeopardy)
 
     else:
-        console.print("No question found")
+        console.print("You've already answered that one! Please pick another one.")
         select_category(player)
         
