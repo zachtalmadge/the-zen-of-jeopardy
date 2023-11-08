@@ -1,4 +1,5 @@
 from models.__init__ import CONN, CURSOR
+from models.Question import Question
 
 class User:
     def __init__(self, name, score=0, id=None):
@@ -37,8 +38,10 @@ class User:
         else:
             self._score = new_score
 
-    #! Attributes
+    #! Attributes/ Associations
 
+    def questions_answered(self):
+        return len([question for question in Question.get_all() if question.point_value == ""])
 
     #! ORM class methods
 
