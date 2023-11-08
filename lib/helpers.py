@@ -194,3 +194,4 @@ def select_question(category, points, player):
     else:
         console.print("No question found")
         select_category(player)
+        
