@@ -121,6 +121,7 @@ def subtract_points(selected_question, player, doubleJeopardy):
     
 def end_game(player):
     console.print(f"Congratulations! Your final score is {player.score}!")
+    menu()
 
 def check_answer(selected_question, answer, player, doubleJeopardy):
     global timer_expired_flag
