@@ -128,11 +128,14 @@ def check_answer(selected_question, answer, player, doubleJeopardy):
     if selected_question.answer == answer:
         console.print(f"Great job! You won {selected_question.point_value} points!", style="subhead")
         console.print(f"Your current score is {player.score + selected_question.point_value}.")
+        
         add_points(selected_question, player, doubleJeopardy)
     else:
         console.print(f"Sorry, the answer was {selected_question.answer}, you lost {selected_question.point_value} points.", style="subhead")
         console.print(f"Your current score is {player.score - selected_question.point_value}.")
+        
         subtract_points(selected_question, player, doubleJeopardy)
+        
     selected_question.point_value = ""
     selected_question.save()
 
