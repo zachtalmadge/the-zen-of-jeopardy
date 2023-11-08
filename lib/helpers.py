@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.console import Theme
 from rich.table import Table
 import random
+from threading import Timer
 import ipdb
 
 custom_theme = Theme({
@@ -17,6 +18,7 @@ custom_theme = Theme({
 })
 
 console = Console(theme=custom_theme)
+timer_expired_flag = False
 
 EXIT_WORDS = ["0", "exit", "quit"]
 
@@ -121,6 +123,8 @@ def end_game(player):
     console.print(f"Congratulations! Your final score is {player.score}!")
 
 def check_answer(selected_question, answer, player, doubleJeopardy):
+    global timer_expired_flag
+    timer_expired_flag = False
 
     if selected_question.answer == answer:
         add_points(selected_question, player, doubleJeopardy)
@@ -182,28 +186,51 @@ def select_category(player):
     select_question(category, points, player)
 
 def select_question(category, points, player):
+    global timer_expired_flag
       
     selected_question = next((question for question in category.category_questions() 
                               if question.point_value == points), None)
     
     if selected_question:
-        
+
         doubleJeopardy = False
+         # Create a 10-second timer
+        timer = Timer(10, timer_expired, args=(selected_question, player, doubleJeopardy))
+        timer.start()
         
         # 8% chance that double jeopardy will be set to True
         if random.randint(1, 100) <= 8:
             console.print('DOUBLE JEOPARDY!!!', style="subhead")
             doubleJeopardy = True
         
+        console.print("You have 10 seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
-        user_answer = input("What is... ").strip()
+        user_answer = ""
+        
+        while not timer_expired_flag and not user_answer:
+            user_answer = input("What is... ").strip()
+
+        if not timer_expired_flag:
+            timer.cancel()
+        
 
         if user_answer in EXIT_WORDS:
+            timer.cancel()
             exit_program()
-
-        check_answer(selected_question, user_answer, player, doubleJeopardy)
+        
 
     else:
         console.print("You've already answered that one! Please pick another one.")
         select_category(player)
         
+    check_answer(selected_question, user_answer, player, doubleJeopardy)
+
+def timer_expired(selected_question, player, doubleJeopardy):
+    global timer_expired_flag  # Declare that you're using the global variable
+    console.print("Time's up! Press Enter to continue", style="subhead")
+    user_answer = ""
+    timer_expired_flag = True  # Set the flag to True
+
+    if user_answer in EXIT_WORDS:
+        exit_program()
+    

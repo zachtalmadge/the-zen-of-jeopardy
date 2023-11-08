@@ -119,7 +119,7 @@ class User:
 
     #! ORM instance methods
 
-    def save(self):
+    def save(self, conn, cursor):
         CURSOR.execute(
             """
                 INSERT INTO players (name, score)
