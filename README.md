@@ -20,7 +20,6 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
    ```
    git clone git@github.com:your-username/the-zen-of-jeopardy.git
    ```
-   
 3. Navigate to the cloned directory:
    ```
    cd the-zen-of-jeopardy
@@ -29,14 +28,14 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
    ```
    pipenv install && pipenv shell
    ```
+5. Run the seed file:
+   ```
+   python lib/seed.py
+   ```
 
 ## How to Use
 
-After installation, you can run The Zen of Jeopardy! with the following commands from the terminal (seed file only needs to be run first time program is used):
-
-```
-python lib/seed.py
-```
+After installation, you can run The Zen of Jeopardy! with the following commands from the terminal:
 ```
 python lib/cli.py
 ```
