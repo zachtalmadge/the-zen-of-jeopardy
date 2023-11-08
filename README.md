@@ -67,7 +67,7 @@ To answer a question, simply type in your answer after the prompt (No need to ad
 
 Once a question is answered, its square on the board will be cleared and you will be unable to select it again.
 
-![96d01cdf-db7e-46d3-842b-4cc72bf603ad](https://github.com/zachtalmadge/the-zen-of-jeopardy/assets/139499376/50f6f334-f675-4ad5-a817-cdae161647fa)
+![1_iviuRQGdOIwnXGsqYAfccg](https://github.com/zachtalmadge/the-zen-of-jeopardy/assets/139499376/48b2b265-02cb-487f-a3a5-38b4a4c41f4d)
 
 Once all questions have been answered, check your final score!
 
