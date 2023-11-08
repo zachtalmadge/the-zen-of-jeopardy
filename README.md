@@ -14,7 +14,7 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
 
 1. Clone the repository to your local machine:
    ```
-   git clone https://github.com/your-username/TheZenOfJeopardy.git
+   git clone https://github.com/zachtalmadge/TheZenOfJeopardy.git
    ```
 2. Navigate to the cloned directory:
    ```
@@ -22,7 +22,7 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
    ```
 3. Install the necessary dependencies:
    ```
-   pip install -r requirements.txt
+   pipenv install
    ```
 
 ## How to Use
@@ -30,7 +30,7 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
 After installation, you can run The Zen of Jeopardy! with the following command from the terminal:
 
 ```
-python jeopardy.py
+python3 lib/cli.py
 ```
 
 Upon starting the game, you will be presented with:

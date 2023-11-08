@@ -206,6 +206,7 @@ def select_question(category, points, player):
         
         console.print("You have 10 seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
+        
         user_answer = ""
         
         while not timer_expired_flag and not user_answer:
@@ -213,12 +214,10 @@ def select_question(category, points, player):
 
         if not timer_expired_flag:
             timer.cancel()
-        
 
         if user_answer in EXIT_WORDS:
             timer.cancel()
             exit_program()
-        
 
     else:
         console.print("You've already answered that one! Please pick another one.")
@@ -228,8 +227,11 @@ def select_question(category, points, player):
 
 def timer_expired(selected_question, player, doubleJeopardy):
     global timer_expired_flag  # Declare that you're using the global variable
+    
     console.print("Time's up! Press Enter to continue", style="subhead")
+    
     user_answer = ""
+    
     timer_expired_flag = True  # Set the flag to True
 
     if user_answer in EXIT_WORDS:
