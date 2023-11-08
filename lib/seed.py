@@ -10,7 +10,7 @@ def drop_tables():
     Category.drop_table()
 
 def create_tables():
-    # User.create_table()
+    User.create_table()
     Category.create_table()
     Question.create_table()
 
