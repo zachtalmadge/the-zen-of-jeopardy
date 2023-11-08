@@ -32,8 +32,6 @@ class User:
     def score(self, new_score):
         if not isinstance(new_score, int):
             raise TypeError("Score must be an integer")
-        elif new_score < 0:
-            raise ValueError("Score cannot be less than 0")
         else:
             self._score = new_score
 
