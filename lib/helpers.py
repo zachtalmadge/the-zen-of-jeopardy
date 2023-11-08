@@ -20,7 +20,6 @@ custom_theme = Theme({
 console = Console(theme=custom_theme)
 
 EXIT_WORDS = ["0", "exit", "quit"]
-question_count = 0
 
 def welcome():
     console.print("""
@@ -42,6 +41,7 @@ def menu():
     print("1. Play a game")
     print("2. View scoreboard")
     print("3. View rules")
+    print("4. Reset game")
 
 def exit_program():
     console.print("Goodbye!", style="subhead")
@@ -119,26 +119,27 @@ def subtract_points(selected_question, player, doubleJeopardy):
     player.update()
     
 def end_game(player):
-    global question_count
     console.print(f"Congratulations! Your final score is {player.score}!")
-    question_count = 0
 
 def check_answer(selected_question, answer, player, doubleJeopardy):
-    global question_count
 
     if selected_question.answer == answer:
-        console.print(f"Great job! You won {selected_question.point_value} points!", style="subhead")
-        console.print(f"Your current score is {player.score + selected_question.point_value}.")
         add_points(selected_question, player, doubleJeopardy)
+        
+        console.print(f"Great job! You won {selected_question.point_value} points!", style="subhead")
+        console.print(f"Your current score is {player.score}.")
+        
     else:
-        console.print(f"Sorry, the answer was {selected_question.answer}, you lost {selected_question.point_value} points.", style="subhead")
-        console.print(f"Your current score is {player.score - selected_question.point_value}.")
         subtract_points(selected_question, player, doubleJeopardy)
+        
+        console.print(f"Sorry, the answer was {selected_question.answer}, you lost {selected_question.point_value} points.", style="subhead")
+        console.print(f"Your current score is {player.score}.")
+        
+        
     selected_question.point_value = ""
     selected_question.save()
 
-    question_count += 1
-    if question_count < 30:
+    if player.questions_answered() < 30:
         play_game(player)
     else:
         end_game(player)
@@ -147,7 +148,6 @@ def select_category(player):
 
     console.print("Select a question: ", style="subhead")
     
-    # re-assign selected_category from None to input 
     selected_category = input("Type a category name: ").strip()
     selected_category = selected_category.lower()
 
@@ -166,15 +166,16 @@ def select_category(player):
         if selected_points in EXIT_WORDS:
             exit_program()
 
+        # if input cannot be converted to an integer, function will be run back
         points = int(selected_points)
     
-    except:
+    except ValueError:
         print('You must input a valid number!')
         select_category(player)
         
     category = Category.find_by_name(selected_category)
     
-    # if the user had already selected the points, restart the function
+    # if player enters an invalid question amount
     if points not in [question.point_value for question in category.category_questions() if question.point_value]:
         console.print('Invalid question amount!')
         return select_category(player)
@@ -187,11 +188,13 @@ def select_question(category, points, player):
                               if question.point_value == points), None)
     
     if selected_question:
+
         doubleJeopardy = False
          # Create a 10-second timer
         timer = Timer(10, timer_expired, args=(selected_question, player, doubleJeopardy))
         timer.start()
         
+        # 8% chance that double jeopardy will be set to True
         if random.randint(1, 100) <= 8:
             console.print('DOUBLE JEOPARDY!!!', style="subhead")
             doubleJeopardy = True
@@ -208,7 +211,7 @@ def select_question(category, points, player):
         
 
     else:
-        console.print("No question found")
+        console.print("You've already answered that one! Please pick another one.")
         select_category(player)
         
     check_answer(selected_question, user_answer, player, doubleJeopardy)

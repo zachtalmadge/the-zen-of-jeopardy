@@ -1,10 +1,11 @@
 from models.User import User
 from models.Category import Category
 from models.Question import Question
+from helpers import console
 # import ipdb
 
 def drop_tables():
-    User.drop_table()
+    # User.drop_table()
     Question.drop_table()
     Category.drop_table()
 
@@ -57,6 +58,12 @@ def seed_jeopardy_board():
     git_q4 = Question.create_question('This Git command is used to connect a local repository to a remote server, setting the remote as the default for future pushes.', 'git remote add origin', 800, 4, git_category.id)
     git_q5 = Question.create_question('This Git command is used to download changes from the remote repository to your local working directory.', 'git pull', 1000, 5, git_category.id)
         
+
+def resetGame():
+    drop_tables()
+    create_tables()
+    seed_jeopardy_board()
+    console.print('Game has been reset', style="heading")
 
 if __name__ == "__main__":
     drop_tables()
