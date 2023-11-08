@@ -4,7 +4,8 @@ from helpers import (
     exit_program,
     find_or_create_player,
     view_scoreboard,
-    view_rules
+    view_rules,
+    delete_user
 )
 
 from seed import resetGame
@@ -23,6 +24,8 @@ def main():
             view_rules()
         elif choice == "4":
             resetGame()
+        elif choice == "5":
+            delete_user()
         else:
             print("Invalid choice")
         
