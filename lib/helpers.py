@@ -19,7 +19,6 @@ custom_theme = Theme({
 console = Console(theme=custom_theme)
 
 EXIT_WORDS = ["0", "exit", "quit"]
-question_count = 0
 
 def welcome():
     console.print("""
@@ -118,12 +117,9 @@ def subtract_points(selected_question, player, doubleJeopardy):
     player.update()
     
 def end_game(player):
-    global question_count
     console.print(f"Congratulations! Your final score is {player.score}!")
-    question_count = 0
 
 def check_answer(selected_question, answer, player, doubleJeopardy):
-    global question_count
 
     if selected_question.answer == answer:
         console.print(f"Great job! You won {selected_question.point_value} points!", style="subhead")
@@ -139,8 +135,7 @@ def check_answer(selected_question, answer, player, doubleJeopardy):
     selected_question.point_value = ""
     selected_question.save()
 
-    question_count += 1
-    if question_count < 30:
+    if player.questions_answered() < 30:
         play_game(player)
     else:
         end_game(player)

@@ -4,7 +4,7 @@ from models.Question import Question
 # import ipdb
 
 def drop_tables():
-    User.drop_table()
+    # User.drop_table()
     Question.drop_table()
     Category.drop_table()
 
