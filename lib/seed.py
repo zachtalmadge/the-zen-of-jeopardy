@@ -61,9 +61,12 @@ def seed_jeopardy_board():
 if __name__ == "__main__":
     drop_tables()
     print("Tables dropped!")
+    
     create_tables()
     print("Tables created!")
+    
     seed_jeopardy_board()
     print("Seed data complete!")
+    
     print("banana")
     # ipdb.set_trace()

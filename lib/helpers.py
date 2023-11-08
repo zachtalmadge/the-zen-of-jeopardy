@@ -5,6 +5,7 @@ from models.Question import Question
 from rich.console import Console
 from rich.console import Theme
 from rich.table import Table
+import random
 import ipdb
 
 custom_theme = Theme({
@@ -44,6 +45,16 @@ def menu():
 def exit_program():
     console.print("Goodbye!", style="subhead")
     exit()
+    
+def view_rules():
+        console.print("Welcome to Jeopardy!", style="subhead")
+        console.print("Here are the rules:", style="subhead")
+        print("1. There are categories with questions of varying point values.")
+        print("2. Select a category and point value.")
+        print("3. Answer the question correctly to earn points.")
+        print("4. Incorrect answers result in point deduction.")
+        print("5. The player will earn a score at the end of the game.")
+        print("6. High scores will be added to the leaderboard.")
 
 def find_or_create_player():
     name = input("Enter your name: ").strip()
@@ -90,8 +101,12 @@ def play_game(player):
     make_table()
     select_category(player)
 
-def add_points(selected_question, player):
-    player.score += selected_question.point_value
+def add_points(selected_question, player, doubleJeopardy):
+    if doubleJeopardy:
+        player.score += selected_question.point_value * 2
+    else:
+        player.score += selected_question.point_value
+    
     player.update()
     
 def end_game(player):
@@ -99,12 +114,12 @@ def end_game(player):
     console.print(f"Congratulations! Your score is {player.score}!")
     question_count = 0
 
-def check_answer(selected_question, answer, player):
+def check_answer(selected_question, answer, player, doubleJeopardy):
     global question_count
 
     if selected_question.answer == answer:
         console.print("Great job!", style="subhead")
-        add_points(selected_question, player)
+        add_points(selected_question, player, doubleJeopardy)
     else:
         console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
     selected_question.point_value = ""
@@ -159,13 +174,22 @@ def select_question(category, points, player):
                               if question.point_value == points), None)
     
     if selected_question:
+        
+        # randomly decide if question will be a double jeopardy
+        doubleJeopardy = False
+        
+        # 8% chance that double jeopardy will be be invoked
+        if random.randint(1, 100) <= 8:
+            console.print('DOUBLE JEOPARDY!!!', style="subhead")
+            doubleJeopardy = True
+        
         console.print(selected_question.question_text, style="subhead")
         user_answer = input("What is... ").strip()
 
         if user_answer in EXIT_WORDS:
             exit_program()
 
-        check_answer(selected_question, user_answer, player)
+        check_answer(selected_question, user_answer, player, doubleJeopardy)
 
     else:
         console.print("No question found")
