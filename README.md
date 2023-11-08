@@ -43,6 +43,8 @@ python lib/cli.py
 
 Upon starting the game, you will be presented with a menu:
 
+![1_cLh-LxkiOy11K7nf2aZO3A](https://github.com/zachtalmadge/the-zen-of-jeopardy/assets/139499376/804ba6c5-5958-44ad-8be9-aefbc1155096)
+
 0. Exit the program
 1. Play a game
 2. View scoreboard
@@ -53,6 +55,8 @@ If you need to brush up on the rules, enter 3.
 
 If you are a new or returning player, enter 1. Your profile will be retrieved or a new one will be created for you, and the game will begin!
 
+![1_VNcGIeUU3R46IKP5RyfhBw](https://github.com/zachtalmadge/the-zen-of-jeopardy/assets/139499376/c25bcd4b-e7f0-4d87-b7d9-db80a5dde276)
+
 A board containing the categories and questions will appear on screen.
 
 To select a question, type the category (e.g., `Javascript`), and then the desired point value (e.g. `200`) when prompted.
@@ -62,6 +66,8 @@ A timer will start as soon as your question is selected, so be ready!
 To answer a question, simply type in your answer after the prompt (No need to add the `What is..` as we provided it).
 
 Once a question is answered, its square on the board will be cleared and you will be unable to select it again.
+
+![96d01cdf-db7e-46d3-842b-4cc72bf603ad](https://github.com/zachtalmadge/the-zen-of-jeopardy/assets/139499376/50f6f334-f675-4ad5-a817-cdae161647fa)
 
 Once all questions have been answered, check your final score!
 
