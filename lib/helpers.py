@@ -43,6 +43,7 @@ def menu():
     print("2. View scoreboard")
     print("3. View rules")
     print("4. Reset game")
+    print("5. Delete User")
 
 def exit_program():
     console.print("Goodbye!", style="subhead")
@@ -84,6 +85,18 @@ def view_scoreboard():
         table.add_row(player.name, str(player.score), style="tile")
 
     console.print(table)
+    
+def delete_user():
+    name = input("Enter your name: ").strip()
+
+    if name.lower() in EXIT_WORDS:
+        exit_program()
+    
+    player = User.find_by_name(name)
+    if player:
+        player.delete()
+    else:
+        console.print(f"Could not find {name}.", style="subhead")
 
 def make_table():
     table = Table(title="Play the Zen of Jeopardy!", border_style="black", show_lines=True, style="table")
@@ -196,7 +209,7 @@ def select_question(category, points, player):
 
         doubleJeopardy = False
          # Create a 10-second timer
-        timer = Timer(10, timer_expired, args=(selected_question, player, doubleJeopardy))
+        timer = Timer(15, timer_expired, args=(selected_question, player, doubleJeopardy))
         timer.start()
         
         # 8% chance that double jeopardy will be set to True
@@ -204,7 +217,7 @@ def select_question(category, points, player):
             console.print('DOUBLE JEOPARDY!!!', style="subhead")
             doubleJeopardy = True
         
-        console.print("You have 10 seconds to answer the question.", style="subhead")
+        console.print("You have 15 seconds to answer the question.", style="subhead")
         console.print(selected_question.question_text, style="subhead")
         
         user_answer = ""
