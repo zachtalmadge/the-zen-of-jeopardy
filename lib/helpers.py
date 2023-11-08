@@ -133,7 +133,7 @@ def select_category(player):
         return select_category(player)
 
     # if input points it not a valid point value, re-run the function
-    selected_points = input("Type a question amount: $")
+    selected_points = input("Type a question amount: $").strip()
 
     if selected_points in EXIT_WORDS:
         exit_program()
