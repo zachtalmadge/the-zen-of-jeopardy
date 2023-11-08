@@ -164,9 +164,10 @@ def select_category(player):
         if selected_points in EXIT_WORDS:
             exit_program()
 
+        # if input cannot be converted to an integer, function will be run back
         points = int(selected_points)
     
-    except:
+    except ValueError:
         print('You must input a valid number!')
         select_category(player)
         
