@@ -108,16 +108,27 @@ def add_points(selected_question, player, doubleJeopardy):
     
     player.update()
     
+def subtract_points(selected_question, player, doubleJeopardy):
+    if doubleJeopardy:
+        player.score -= selected_question.point_value * 2
+    else:
+        player.score -= selected_question.point_value
+        
+    player.update()
+    
 def end_game(player):
-    console.print(f"Congratulations! Your score is {player.score}!")
+    console.print(f"Congratulations! Your final score is {player.score}!")
 
 def check_answer(selected_question, answer, player, doubleJeopardy):
 
     if selected_question.answer == answer:
-        console.print("Great job!", style="subhead")
+        console.print(f"Great job! You won {selected_question.point_value} points!", style="subhead")
+        console.print(f"Your current score is {player.score + selected_question.point_value}.")
         add_points(selected_question, player, doubleJeopardy)
     else:
-        console.print(f"Sorry, the answer was {selected_question.answer}", style="subhead")
+        console.print(f"Sorry, the answer was {selected_question.answer}, you lost {selected_question.point_value} points.", style="subhead")
+        console.print(f"Your current score is {player.score - selected_question.point_value}.")
+        subtract_points(selected_question, player, doubleJeopardy)
     selected_question.point_value = ""
     selected_question.save()
 
@@ -144,16 +155,17 @@ def select_category(player):
 
     # if input points it not a valid point value, re-run the function
     selected_points = input("Type a question amount: $").strip()
-
-    if selected_points in EXIT_WORDS:
-        exit_program()
-
-    points = int(selected_points)
     
-    if not isinstance(points, int):
+    try:
+        if selected_points in EXIT_WORDS:
+            exit_program()
+
+        points = int(selected_points)
+    
+    except:
         print('You must input a valid number!')
-        return select_category(player)
-    
+        select_category(player)
+        
     category = Category.find_by_name(selected_category)
     
     # if the user had already selected the points, restart the function
@@ -189,3 +201,4 @@ def select_question(category, points, player):
     else:
         console.print("No question found")
         select_category(player)
+        
