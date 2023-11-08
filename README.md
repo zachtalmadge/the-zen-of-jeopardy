@@ -14,11 +14,11 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
 
 1. Fork and clone the repository to your local machine:
    ```
-   git clone https://github.com/zachtalmadge/TheZenOfJeopardy.git
+   git clone https://github.com/zachtalmadge/the-zen-of-jeopardy.git
    ```
    or
    ```
-   git clone git@github.com:your-username/the-zen-of-jeopardy.git
+   git clone git@github.com:zachtalmadge/the-zen-of-jeopardy.git
    ```
 3. Navigate to the cloned directory and run the following command to install the dependencies:
    ```
