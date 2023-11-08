@@ -12,15 +12,20 @@ Before installing, ensure you have Python installed on your system.
 
 To install The Zen of Jeopardy!, open your terminal and follow these steps:
 
-1. Clone the repository to your local machine:
+1. Fork and clone the repository to your local machine:
    ```
    git clone https://github.com/your-username/the-zen-of-jeopardy.git
    ```
-2. Navigate to the cloned directory:
+   or
+   ```
+   git clone git@github.com:your-username/the-zen-of-jeopardy.git
+   ```
+   
+3. Navigate to the cloned directory:
    ```
    cd the-zen-of-jeopardy
    ```
-3. Install the necessary dependencies and enter Python shell:
+4. Install the necessary dependencies and enter Python shell:
    ```
    pipenv install && pipenv shell
    ```
