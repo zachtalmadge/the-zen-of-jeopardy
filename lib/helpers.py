@@ -18,6 +18,7 @@ custom_theme = Theme({
 
 console = Console(theme=custom_theme)
 
+EXIT_WORDS = ["0", "exit", "quit"]
 question_count = 0
 
 def welcome():
@@ -57,6 +58,10 @@ def view_rules():
 
 def find_or_create_player():
     name = input("Enter your name: ").strip()
+
+    if name.lower() in EXIT_WORDS:
+        exit_program()
+
     player = User.find_by_name(name)
 
     if player is None:
@@ -66,6 +71,17 @@ def find_or_create_player():
     else:
         console.print(f"Welcome back, {player.name}!", style="subhead")
         play_game(player)
+
+def view_scoreboard():
+    table = Table(title="Jeopardy Leaders!", border_style="black", show_lines=True, style="table")
+    table.add_column("Player", style="table_head")
+    table.add_column("Score", style="table_head")
+
+    winners = [player for player in User.get_top_three()]
+    for player in winners:
+        table.add_row(player.name, str(player.score), style="tile")
+
+    console.print(table)
 
 def make_table():
     table = Table(title="Play the Zen of Jeopardy!", border_style="black", show_lines=True, style="table")
@@ -120,8 +136,11 @@ def select_category(player):
     console.print("Select a question: ", style="subhead")
     
     # re-assign selected_category from None to input 
-    selected_category = input("Type a category name: ")
+    selected_category = input("Type a category name: ").strip()
     selected_category = selected_category.lower()
+
+    if selected_category in EXIT_WORDS:
+        exit_program()
     
     # if input category is not one of our categories, re-run the function
     if selected_category not in ['javascript', 'react', 'python', 'sql', 'comp sci', 'git']:
@@ -129,7 +148,11 @@ def select_category(player):
         return select_category(player)
 
     # if input points it not a valid point value, re-run the function
-    selected_points = input("Type a question amount: $")
+    selected_points = input("Type a question amount: $").strip()
+
+    if selected_points in EXIT_WORDS:
+        exit_program()
+
     points = int(selected_points)
     
     if not isinstance(points, int):
@@ -161,7 +184,10 @@ def select_question(category, points, player):
             doubleJeopardy = True
         
         console.print(selected_question.question_text, style="subhead")
-        user_answer = input("What is... ")
+        user_answer = input("What is... ").strip()
+
+        if user_answer in EXIT_WORDS:
+            exit_program()
 
         check_answer(selected_question, user_answer, player, doubleJeopardy)
 

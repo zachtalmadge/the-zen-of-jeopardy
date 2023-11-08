@@ -3,6 +3,7 @@ from helpers import (
     menu,
     exit_program,
     find_or_create_player,
+    view_scoreboard,
     view_rules
 )
 
@@ -14,6 +15,8 @@ def main():
             exit_program()
         elif choice == "1":
             find_or_create_player()
+        elif choice == "2":
+            view_scoreboard()
         elif choice == "3":
             view_rules()
         else:

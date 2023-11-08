@@ -81,6 +81,18 @@ class User:
         return [cls(row[1], row[2], row[0]) for row in rows]
     
     @classmethod
+    def get_top_three(cls):
+        CURSOR.execute(
+            """
+                SELECT * from players
+                ORDER BY score DESC
+                LIMIT 3;
+            """
+        )
+        rows = CURSOR.fetchall()
+        return [cls(row[1], row[2], row[0]) for row in rows]
+    
+    @classmethod
     def find_by_name(cls, name):
         CURSOR.execute(
             """
