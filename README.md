@@ -22,7 +22,7 @@ To install The Zen of Jeopardy!, open your terminal and follow these steps:
    ```
 3. Navigate to the cloned directory and run the following command to install the dependencies:
    ```
-   pipenv install
+   pipenv install && pipenv shell
    ```
 4. Seed the game by running the following command in the root directory:
    ```
@@ -72,6 +72,8 @@ Once all questions have been answered, check your final score!
 Head over to the scoreboard to view the leaders with the highest scores!
 
 Select option 4 from the menu to reset the game and play again.
+
+If you choose, you may delete your player profile by selecting option 5 on the menu and enter your user name.
 
 ## Contributors
 
