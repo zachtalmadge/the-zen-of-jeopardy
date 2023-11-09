@@ -2,10 +2,8 @@ from models.User import User
 from models.Category import Category
 from models.Question import Question
 from helpers import console
-# import ipdb
 
 def drop_tables():
-    # User.drop_table()
     Question.drop_table()
     Category.drop_table()
 
@@ -66,14 +64,5 @@ def resetGame():
     console.print('Game has been reset', style="heading")
 
 if __name__ == "__main__":
-    drop_tables()
-    print("Tables dropped!")
-    
-    create_tables()
-    print("Tables created!")
-    
-    seed_jeopardy_board()
-    print("Seed data complete!")
-    
+    resetGame()
     print("banana")
-    # ipdb.set_trace()
